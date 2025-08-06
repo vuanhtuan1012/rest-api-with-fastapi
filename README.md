@@ -6,6 +6,13 @@ This repo contains notes and projects of the course [Mastering REST APIs with Fa
   - [What is an API?](#what-is-an-api)
   - [What is a web API?](#what-is-a-web-api)
   - [What is in a request?](#what-is-in-a-request)
+  - [What is REST?](#what-is-rest)
+  - [What is a resource?](#what-is-a-resource)
+  - [What does stateless mean?](#what-does-stateless-mean)
+  - [What does cacheable mean?](#what-does-cacheable-mean)
+  - [What does hypermedia-driven mean?](#what-does-hypermedia-driven-mean)
+  - [What does multiple servers mean?](#what-does-multiple-servers-mean)
+  - [Conclusion](#conclusion)
 - [Module 2: Working with FastAPI](#module-2-working-with-fastapi)
 - [Module 3: Introduction to pytest](#module-3-introduction-to-pytest)
 - [Reference](#reference)
@@ -52,6 +59,51 @@ There're 4 pieces of data in a request:
 - **Header:** is also information in key-value pairs, but the keys tend to have specific meaning.
   - *For example*, `Content-Type`, `Content-Length`, `Date`, etc.
   - Headers are specific key value pairs that mean something.
+
+### What is REST?
+
+REST is a set of architectural constraints.
+- Use the concept of **client** and **server**.
+- Use the concept of **resource**.
+- Be **stateless**.
+- Be **cacheable**.
+- Have a uniform, hypermedia-driven interface.
+- If backend use **multiple servers**, they're invisible to the client.
+
+### What is a resource?
+
+- Resources are *things* that the API deals in, such as: posts, comments, likes, users, etc.
+- When the client makes a request, it's a request about a particular resource.
+- When the server responds to a request, it does so with a resource representation.
+
+### What does stateless mean?
+
+- The server doesn't keep any information about the clients.
+- In every request, the client has to send all the relevant information for the server to understand what's going on.
+- The server doesn't remember anything about the client.
+- Being stateless makes the server much simpler, much more straightforward to code, and also perform much faster.
+
+### What does cacheable mean?
+
+- If one client makes a request for information, it should be possible for the backend to save that response.
+- So, if another client makes a request for the same information, it doesn't have to be recalculated.
+- A cache is normally another layer in front of the API that remembers requests and the response that was sent back to that request.
+
+### What does hypermedia-driven mean?
+
+- If a resource is related to another resource, there should be an actual link in the response which allows the client to find the related resources.
+- Most APIs don't implement it. It's an optional.
+
+### What does multiple servers mean?
+
+- Sometimes, backends are made up of multiple servers, for example, one for retrieving information, another for user authentication and registration.
+- The client shouldn't care about how the backend is organized.
+
+### Conclusion
+
+- The API is the interface between the client and server. It isn't the actual processing and the work that goes in behind the scenes.
+- The API is just the request, the responses, and the way the information is passed from one place to another.
+- REST API defines how the interface should behave, not how the implementation or the architecture of the backend system.
 
 ## Module 2: Working with FastAPI
 
