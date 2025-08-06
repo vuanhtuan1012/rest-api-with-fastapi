@@ -32,24 +32,26 @@ This repo contains notes and projects of the course [Mastering REST APIs with Fa
 
 ### What is in a request?
 
-- There're 4 pieces of data in a request:
-  - **Method**: can be one of many different values like `GET`, `POST`, `PUT`, etc.
-    - These values are essentially preset. These methods have meaning to most servers and clients.
-    - So, usually servers will repond in a predictable way to each method.
-    - For example,
-      - `GET` method tends to be used to retrieve information.
-      - `POST` method tends to be used to create information.
-      - `PATCH` method tends to be used to modify an existing bit of information.
-    - Some methods have certain restrictions.
-    - For example, most requests can have a body, some data included in the request, but some methods don't support a body being sent. For instance, we couldn't use the `GET` method to send information to the server because it can't have a body in most cases.
-  - **Endpoint:** is where the request is sent.
-    - For example, given an API url: `api.com/post?sorting=new`.
-      - `api.com`: is a host.
-      - `/post`: is an endpoint.
-      - `?sorting=new`: `sorting=new` is the `sorting` query string argument with a value of `new`.
-        - It's a way to send extra data to the server.
-  - **Body:** usually is JSON data, used to when the client wants to send an extra information to the server.
-  - **Header:** is also information in key-value pairs, but the keys tend to have specific meaning. For example, `Content-Type`. Headers are specific key value pairs that mean something.
+There're 4 pieces of data in a request:
+- **Method**: can be one of many different values like `GET`, `POST`, `PUT`, etc.
+  - These values are essentially preset. These methods have meaning to most servers and clients.
+  - So, usually servers will repond in a predictable way to each method.
+  - *For example*,
+    - `GET` method tends to be used to retrieve information.
+    - `POST` method tends to be used to create information.
+    - `PATCH` method tends to be used to modify an existing bit of information.
+  - Some methods have certain restrictions.
+  - *For example*, most requests can have a body, some data included in the request, but some methods don't support a body being sent. For instance, we couldn't use the `GET` method to send information to the server because it can't have a body in most cases.
+- **Endpoint:** is where the request is sent.
+  - *For example*, given an API url `api.com/post?sorting=new`.
+    - `api.com`: is a host.
+    - `/post`: is an endpoint.
+    - `?sorting=new`: `sorting=new` is the `sorting` query string argument with a value of `new`.
+      - It's a way to send extra data to the server.
+- **Body:** usually is JSON data, used to when the client wants to send an extra information to the server.
+- **Header:** is also information in key-value pairs, but the keys tend to have specific meaning.
+  - *For example*, `Content-Type`, `Content-Length`, `Date`, etc.
+  - Headers are specific key value pairs that mean something.
 
 ## Module 2: Working with FastAPI
 
