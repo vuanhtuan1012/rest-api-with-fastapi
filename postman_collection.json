@@ -59,12 +59,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{base_url}}/",
+					"raw": "{{base_url}}/post/{{post_id}}/comment",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
-						""
+						"post",
+						"{{post_id}}",
+						"comment"
 					]
 				},
 				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
@@ -91,12 +93,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{base_url}}/",
+					"raw": "{{base_url}}/post/{{post_id}}",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
-						""
+						"post",
+						"{{post_id}}"
 					]
 				},
 				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
@@ -125,7 +128,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"body\": \"Add the body of post\"\n}",
+					"raw": "{\n\t\"body\": \"the body of post\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -167,7 +170,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"body\": \"Add your name in the body\",\n    \"post_id\": 1\n}",
+					"raw": "{\n\t\"body\": \"the body of comment\",\n    \"post_id\": {{post_id}}\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -210,7 +213,7 @@
 	],
 	"variable": [
 		{
-			"key": "id",
+			"key": "post_id",
 			"value": "1"
 		},
 		{
