@@ -2,14 +2,15 @@
 # @Author: VU Anh Tuan
 # @Date:   2025-08-10 10:36:50
 # @Last Modified by:   VU Anh Tuan
-# @Last Modified time: 2025-08-10 17:01:19
+# @Last Modified time: 2025-08-10 19:09:48
 """
 Post models
 """
 from pydantic import BaseModel
+from social_media_api.models.comment import Comment
 
 
-class UserPostIn(BaseModel):
+class PostIn(BaseModel):
     """
     Stores a post provided by the user
     """
@@ -17,7 +18,7 @@ class UserPostIn(BaseModel):
     body: str
 
 
-class UserPost(UserPostIn):
+class Post(PostIn):
     """
     Stores a post sent to the database
     """
@@ -25,27 +26,10 @@ class UserPost(UserPostIn):
     id: int
 
 
-class CommentIn(BaseModel):
-    """
-    Stores a comment provided by the user
-    """
-
-    body: str
-    post_id: int
-
-
-class Comment(CommentIn):
-    """
-    Stores a comment sent to the database
-    """
-
-    id: int
-
-
-class UserPostWithComments(BaseModel):
+class PostWithComments(BaseModel):
     """
     Stores a post with comments
     """
 
-    post: UserPost
+    post: Post
     comments: list[Comment]
