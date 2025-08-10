@@ -1,2 +1,2 @@
 [MAIN]
-init-hook='import sys; sys.path.append(r"D:\Git\rest-api-with-fastapi\rest-api-with-fastapi")'
+init-hook='import sys; sys.path.append(r"D:\Git\rest-api-with-fastapi\social_media_api")'
