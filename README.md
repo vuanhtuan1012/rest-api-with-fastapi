@@ -21,7 +21,7 @@ This repo contains notes and projects of the course [Mastering REST APIs with Fa
   - [Deadlock](#deadlock)
   - [Race condition](#race-condition)
   - [Linter](#linter)
-  - [Formatetr](#formatetr)
+  - [Formatter](#formatter)
   - [Pydantic](#pydantic)
   - [Response Model](#response-model)
   - [Request Model](#request-model)
@@ -200,7 +200,7 @@ REST is a set of architectural constraints.
 - Linter **doesn't change** code, only reports issues.
 - Popular tools: [flake8](https://flake8.pycqa.org/en/latest/), [pylint](https://pypi.org/project/pylint/), [ruff](https://pypi.org/project/ruff/) (fast, Rust-based).
 
-### Formatetr
+### Formatter
 
 - A formatter is a **code beautifier**.
 - **Formatter** automatically **rewrites** the code so it follows a consistent style, without changing its behavior.
