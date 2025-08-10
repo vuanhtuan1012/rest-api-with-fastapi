@@ -2,7 +2,7 @@
 # @Author: VU Anh Tuan
 # @Date:   2025-08-10 19:00:29
 # @Last Modified by:   VU Anh Tuan
-# @Last Modified time: 2025-08-10 19:09:18
+# @Last Modified time: 2025-08-10 19:21:20
 """
 Comment routers
 """
@@ -18,7 +18,7 @@ router = APIRouter()
 @router.post("/comment", response_model=Comment, status_code=201)
 async def create_comment(comment: CommentIn):
     """
-    Creates a post
+    Creates a comment
     """
     post = get_post(comment.post_id)
     if not post:
