@@ -2,7 +2,7 @@
 # @Author: VU Anh Tuan
 # @Date:   2025-08-10 10:53:44
 # @Last Modified by:   VU Anh Tuan
-# @Last Modified time: 2026-08-06 16:19:50
+# @Last Modified time: 2026-08-06 16:44:02
 """
 Posts endpoints
 """
@@ -21,8 +21,8 @@ router = APIRouter(prefix="/posts", tags=["Posts"])
 # helper functions
 def get_post(post_id: int) -> Optional[dict[str, Any]]:
     """
-    Return the post associated with post_id.
-    If not post is found, return None.
+    Returns the post associated with post_id.
+    If not post is found, returns None.
     """
     return POST_TABLE.get(post_id)
 
