@@ -1,0 +1,14 @@
+### Social Media APIs
+@base_url = http://localhost:8000
+
+# Posts endpoints
+### Create a post
+POST {{base_url}}/posts
+Content-Type: application/json
+
+{
+    "body": "This is my post!"
+}
+
+### Get all posts
+GET {{base_url}}/posts

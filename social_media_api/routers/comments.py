@@ -2,20 +2,20 @@
 # @Author: VU Anh Tuan
 # @Date:   2025-08-10 19:00:29
 # @Last Modified by:   VU Anh Tuan
-# @Last Modified time: 2025-08-10 19:21:20
+# @Last Modified time: 2026-08-06 09:37:58
 """
-Comment routers
+Comment endpoints
 """
 from fastapi import APIRouter, HTTPException
-from social_media_api.models.comment import Comment, CommentIn
-from social_media_api.database import COMMENT_TABLE
-from social_media_api.routers.post import get_post
+
+from database import COMMENT_TABLE
+from schemas.comment import Comment, CommentIn
+from routers.posts import get_post
+
+router = APIRouter(prefix="/comments", tags=["Comments"])
 
 
-router = APIRouter()
-
-
-@router.post("/comment", response_model=Comment, status_code=201)
+@router.post("", response_model=Comment, status_code=201)
 async def create_comment(comment: CommentIn):
     """
     Creates a comment
