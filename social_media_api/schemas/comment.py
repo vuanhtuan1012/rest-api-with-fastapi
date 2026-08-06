@@ -6,6 +6,7 @@
 """
 Comment models
 """
+
 from pydantic import BaseModel
 
 

@@ -6,6 +6,7 @@
 """
 Main application
 """
+
 import uvicorn
 from fastapi import FastAPI
 

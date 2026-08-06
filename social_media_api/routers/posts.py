@@ -2,10 +2,11 @@
 # @Author: VU Anh Tuan
 # @Date:   2025-08-10 10:53:44
 # @Last Modified by:   VU Anh Tuan
-# @Last Modified time: 2026-08-06 09:38:03
+# @Last Modified time: 2026-08-06 16:19:50
 """
 Posts endpoints
 """
+
 from typing import Any, Optional
 
 from fastapi import APIRouter, HTTPException
@@ -17,6 +18,16 @@ from schemas.post import Post, PostIn, PostWithComments
 router = APIRouter(prefix="/posts", tags=["Posts"])
 
 
+# helper functions
+def get_post(post_id: int) -> Optional[dict[str, Any]]:
+    """
+    Return the post associated with post_id.
+    If not post is found, return None.
+    """
+    return POST_TABLE.get(post_id)
+
+
+# endpoints
 @router.post("", response_model=Post, status_code=201)
 async def create_post(post: PostIn):
     """
@@ -32,19 +43,12 @@ async def create_post(post: PostIn):
 @router.get("", response_model=list[Post])
 async def get_all_posts():
     """
-    Returns a list of posts
+    Returns the list of posts
     """
     return list(POST_TABLE.values())
 
 
-def get_post(post_id: int) -> Optional[dict[str, Any]]:
-    """
-    Returns a post
-    """
-    return POST_TABLE.get(post_id)
-
-
-@router.get("/{post_id}/comment", response_model=list[Comment])
+@router.get("/{post_id}/comments", response_model=list[Comment])
 async def get_comments_on_post(post_id: int):
     """
     Returns a list of posts

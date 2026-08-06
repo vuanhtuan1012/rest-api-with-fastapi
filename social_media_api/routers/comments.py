@@ -6,6 +6,7 @@
 """
 Comment endpoints
 """
+
 from fastapi import APIRouter, HTTPException
 
 from database import COMMENT_TABLE

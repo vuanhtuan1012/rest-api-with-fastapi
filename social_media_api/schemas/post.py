@@ -6,6 +6,7 @@
 """
 Post models
 """
+
 from pydantic import BaseModel
 
 from schemas.comment import Comment

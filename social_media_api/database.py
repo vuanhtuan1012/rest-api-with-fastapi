@@ -6,6 +6,7 @@
 """
 Database Interface
 """
+
 from typing import Any
 
 POST_TABLE: dict[int, dict[str, Any]] = {}
