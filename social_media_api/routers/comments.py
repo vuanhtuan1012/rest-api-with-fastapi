@@ -2,16 +2,16 @@
 # @Author: VU Anh Tuan
 # @Date:   2025-08-10 19:00:29
 # @Last Modified by:   VU Anh Tuan
-# @Last Modified time: 2026-08-06 09:37:58
+# @Last Modified time: 2026-08-07 09:48:44
 """
 Comment endpoints
 """
 
 from fastapi import APIRouter, HTTPException
 
-from database import COMMENT_TABLE
-from schemas.comment import Comment, CommentIn
-from routers.posts import get_post
+from social_media_api.database import COMMENT_TABLE
+from social_media_api.routers.posts import get_post
+from social_media_api.schemas.comment import Comment, CommentIn
 
 router = APIRouter(prefix="/comments", tags=["Comments"])
 

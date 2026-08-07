@@ -2,14 +2,14 @@
 # @Author: VU Anh Tuan
 # @Date:   2025-08-10 10:36:50
 # @Last Modified by:   VU Anh Tuan
-# @Last Modified time: 2026-08-06 09:39:56
+# @Last Modified time: 2026-08-07 09:38:47
 """
 Post models
 """
 
 from pydantic import BaseModel
 
-from schemas.comment import Comment
+from social_media_api.schemas.comment import Comment
 
 
 class PostIn(BaseModel):

@@ -2,7 +2,7 @@
 # @Author: VU Anh Tuan
 # @Date:   2025-08-10 10:53:44
 # @Last Modified by:   VU Anh Tuan
-# @Last Modified time: 2026-08-06 16:44:02
+# @Last Modified time: 2026-08-07 09:38:12
 """
 Posts endpoints
 """
@@ -11,9 +11,9 @@ from typing import Any, Optional
 
 from fastapi import APIRouter, HTTPException
 
-from database import COMMENT_TABLE, POST_TABLE
-from schemas.comment import Comment
-from schemas.post import Post, PostIn, PostWithComments
+from social_media_api.database import COMMENT_TABLE, POST_TABLE
+from social_media_api.schemas.comment import Comment
+from social_media_api.schemas.post import Post, PostIn, PostWithComments
 
 router = APIRouter(prefix="/posts", tags=["Posts"])
 
