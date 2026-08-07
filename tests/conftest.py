@@ -2,7 +2,7 @@
 # @Author: VU Anh Tuan
 # @Date:   2026-08-06 18:29:25
 # @Last Modified by:   VU Anh Tuan
-# @Last Modified time: 2026-08-07 15:06:30
+# @Last Modified time: 2026-08-07 20:29:07
 """
 Configuration tests
 """
@@ -33,7 +33,7 @@ def http_client() -> Generator:
     yield TestClient(app)
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture()
 async def db() -> AsyncGenerator:
     """
     Provides database session
