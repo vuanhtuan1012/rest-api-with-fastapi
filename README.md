@@ -20,14 +20,25 @@ This repo contains notes and projects of the course [Mastering REST APIs with Fa
   - [Thread vs. Coroutine](#thread-vs-coroutine)
   - [Deadlock](#deadlock)
   - [Race condition](#race-condition)
-  - [Linter](#linter)
   - [Formatter](#formatter)
+  - [Linter](#linter)
+  - [Ruff](#ruff)
   - [Pydantic](#pydantic)
   - [Request Model](#request-model)
   - [Response Model](#response-model)
   - [API Routers](#api-routers)
   - [Project structure](#project-structure)
+  - [Pyproject file](#pyproject-file)
 - [Module 3: Introduction to pytest](#module-3-introduction-to-pytest)
+  - [Basic of pytest](#basic-of-pytest)
+  - [Assertions](#assertions)
+  - [Testing exceptions](#testing-exceptions)
+  - [Fixtures](#fixtures)
+  - [Parametrized tests](#parametrized-tests)
+  - [Mocking](#mocking)
+  - [Measuring coverage](#measuring-coverage)
+  - [Useful command-line options](#useful-command-line-options)
+  - [Best practices](#best-practices)
 - [Reference](#reference)
 
 
@@ -191,6 +202,13 @@ REST is a set of architectural constraints.
 | **Symptom**      | Program hangs                      | Wrong / Unstable output            |
 | **Fix**          | Avoid circular locks, use timeouts | Use locks or atomic operations     |
 
+### Formatter
+- A formatter is a **code beautifier**.
+- **Formatter** automatically **rewrites** the code so it follows a consistent style, without changing its behavior.
+- Formatter focuses on whitespace, indentation, line breaks.
+- Popular tool: [black](https://pypi.org/project/black/), [yapf](https://pypi.org/project/yapf/), [ruff](https://pypi.org/project/ruff/).
+
+
 ### Linter
 - A linter is a **code quality checker**.
 - **Linter** analyzes the code to detect issues and bad practices such as:
@@ -200,11 +218,64 @@ REST is a set of architectural constraints.
 - Linter **doesn't change** code, only reports issues.
 - Popular tools: [flake8](https://flake8.pycqa.org/en/latest/), [pylint](https://pypi.org/project/pylint/), [ruff](https://pypi.org/project/ruff/) (fast, Rust-based).
 
-### Formatter
-- A formatter is a **code beautifier**.
-- **Formatter** automatically **rewrites** the code so it follows a consistent style, without changing its behavior.
-- Formatter focuses on whitespace, indentation, line breaks.
-- Popular tool: [black](https://pypi.org/project/black/), [yapf](https://pypi.org/project/yapf/), [ruff](https://pypi.org/project/ruff/).
+### Ruff
+- Ruff is a modern Python tool that **can replace** several tools such as `black`, `isort`, and part of Flake8 workflows. It is **extremely fast** and **provides both** code formatting and linting capabilities.
+- `ruff format` is used **to format** Python files. It works as a formatter.
+
+  ```bash
+  # find and format all Python files in the project
+  ruff format .
+
+  # format a single Python file
+  ruff format social_media_api/routers/posts.py
+  ```
+- If we want to **only check** whether the code is correctly formatted, we use the option `--check`.
+
+  ```bash
+  ruff format --check .
+  ruff format --check social_media_api/routers/posts.py
+  ```
+- `ruff check` is used to **analyze** code **and detect** potential problems. It works as a linter.
+
+  ```bash
+  # find and check all Python files in the project
+  ruff check .
+
+  # check a single Python file
+  ruff check social_media_api/routers/posts.py
+  ```
+- If we want to **fix** issues **when possible,** we can use the option `--fix`.
+
+  ```bash
+  ruff check --fix .
+  ruff check --fix social_media_api/routers/posts.py
+  ```
+- In a real Python project, a **common workflow** is:
+
+  ```bash
+  # format code
+  ruff format .
+
+  # run lint checks and fix issues when possible
+  ruff check --fix .
+  ```
+- Configure `ruff` in `pyproject.toml`
+
+  ```toml
+  [tool.ruff]
+  line-length = 100
+
+  [tool.ruff.format]
+  quote-style = "double"
+
+  [tool.ruff.lint]
+  select = ["E", "F", "I"]
+  ```
+
+  Explaination:
+  - `line-length = 100`: maximum line length.
+  - `quote-style = "double"`: use double quote.
+  - `select = ["E", "F", "I"]`: check rules start with `E` (*style / coding convention*), `F` (*simple code logic like unused imports, variables, undefined variables, etc.*), and `I` (*imports organizing*)
 
 ### Pydantic
 - [Pydantic](https://docs.pydantic.dev/latest/) is a Python library for **data validation** and **settings management** using Python type hints.
@@ -343,7 +414,12 @@ REST is a set of architectural constraints.
     ```
 
 ### Project structure
-- For a small or medium-sized FastAPI project, this is a recommended structure:
+- For small to medium-sized FastAPI projects, this is a recommended structure:
+  - `routers`: **handle** HTTP requests and responses.
+  - `models`: define the **database schema** using SQLAlchemy ORM models.
+  - `schemas`: define **Pydantic models** for request and response validation.
+
+  *For example:*
 
   ```text
   project/
@@ -352,17 +428,17 @@ REST is a set of architectural constraints.
   │   ├── __init__.py
   │   ├── main.py
   │   │
-  │   ├── routers/   # HTTP layer (request/response)
+  │   ├── routers/   # HTTP layer
   │   │   ├── __init__.py
   │   │   └── comments.py
   │   │   └── posts.py
   │   │
-  │   ├── models/   # SQLAlchemy ORM models
+  │   ├── models/   # ORM models (database schema)
   │   │   ├── __init__.py
   │   │   └── comment.py
   │   │   └── post.py
   │   │
-  │   ├── schemas/   # Pydantic request/response models
+  │   ├── schemas/   # Pydantic models (data schema)
   │   │   ├── __init__.py
   │   │   └── comment.py
   │   │   └── post.py
@@ -375,13 +451,133 @@ REST is a set of architectural constraints.
   ├── requirements.txt
   └── pyproject.toml   # optional but recommended
   ```
-- Use **plural names** for `routers` because each router manages a collection of resources.
-- Use **singular names** for `models`, `schemas` because the filename represents one model class.
-- Separate `models` and `schemas`.
-  - `models` contains SQLAlchemy ORM models.
-  - `schemas` contains Pydantic request/response models.
+- As the project grows, we can introduce additional layers:
+  - `services`: implement the **business logic** (*permissions, validation beyond schema checks, workflows, notifications, rate limits, etc.*) and coordinate application workflows.
+  - `repositories` (*optional*): encapsulate **database access** and data persistence logic.
+- **Convention:**
+  - Use **plural names** for `routers` because each router manages a collection of resources.
+  - Use **singular names** for `models`, `schemas` because the filename represents one model class.
+
+### Pyproject file
+- `pyproject.toml` is one of the most important files in a modern Python project. It serves as a **central configuration file** for the project.
+- It stores the **project metadata.**
+
+  ```toml
+  [project]
+  name = "social-media-api"
+  version = "1.0.0"
+  requires-python = ">=3.11"
+  ```
+- It stores the **configuration of tools** like `ruff`, `pytest`, etc.
+  ```toml
+  [tool.ruff]
+  line-length = 100
+
+  [tool.ruff.format]
+  quote-style = "double"
+
+  [tool.ruff.lint]
+  select = ["E", "F", "I"]
+
+
+  [tool.pytest.ini_options]
+  testpaths = ["tests"]
+  ```
+- It **makes** development and CI/CD configuration **consistent.** Instead of specifying options in command-lines, the tools automatically read their configuration from `pyproject.toml` .
 
 ## Module 3: Introduction to pytest
+
+### Basic of pytest
+- `pytest` is a testing framework that helps:
+  - write automated tests.
+  - verify code behaves correctly.
+  - detect regressions when we change code.
+  - integrate with CI/CD pipelines.
+- `pytest` automatically discovers files named: `test_*.py`, `*_test.py`.
+- The `tests` directory is **commonly located** at the project root, **outside** the application packages. *For example:*
+
+  ```text
+  project/
+  │
+  ├── social_media_api/
+  │   ├── main.py
+  │   ├── routers/
+  │   └── schemas/
+  │
+  ├── tests/
+  │   ├── test_posts.py
+  │   └── test_comments.py
+  │
+  └── pyproject.toml
+  ```
+
+### Assertions
+- `pytest` uses normal Python `assert`, no need methods like `self.assertEqual` in `unittest`. *For example:*
+
+  ```python
+  # calculator.py
+  def add(a, b):
+      return a + b
+
+
+  # test_calculator.py
+  def test_add():
+      assert add(2, 3) == 5
+  ```
+- TODO: test dict contains
+
+### Testing exceptions
+`pytest.raises` is used to test exceptions. *For example:*
+
+```python
+# calculator.py
+def divide(a, b):
+    return a / b
+
+
+# test_calculator.py
+def test_divide_by_zero():
+    with pytest.raises(ZeroDivisionError):
+      divide(10, 0)
+```
+
+### Fixtures
+- Fixtures are one of `pytest`'s most powerful features. Instead of creating the same objects repeatedly, we create fixtures then reuse them. *For example:*
+
+  ```python
+  @pytest.fixture
+  def user():
+      return User("Alice")
+  ```
+- TODO: more about fixture: scope, autouse
+
+### Parametrized tests
+TODO
+
+### Mocking
+TODO
+
+### Measuring coverage
+TODO
+
+### Useful command-line options
+- Run all tests: `pytest`.
+- Run only one file: `pytest tests/test_simple.py`.
+- Run only one test function: `pytest tests/test_simple.py::test_add_two`.
+- Verbose output: `pytest -v`.
+- Show `print()` output: `pytest -s`.
+- Stop after the first failure: `pytest -x`.
+
+### Best practices
+- Keep tests **independent:** one test should not rely on another.
+- Follow the **Arrange-Act-Assert (AAA)** pattern:
+  - Arrange: set up data.
+  - Act: call the code under test.
+  - Assert: verify the result.
+- Use **fixtures for shared setup.**
+- Mock **external dependencies** (HTTP services, email providers, etc.).
+- Use **a separate test database** rather than a development or production datbase.
+- Run tests **automatically** in CI/CD pipeline.
 
 ## Reference
 
