@@ -517,14 +517,44 @@ REST is a set of architectural constraints.
   ```python
   # calculator.py
   def add(a, b):
+      """
+      Performs an addtion operator
+      """
       return a + b
 
 
   # test_calculator.py
   def test_add():
+      """
+      Tests add function
+      """
       assert add(2, 3) == 5
   ```
-- TODO: test dict contains
+- uses the `<=` operator to check whether an dictionary is a subset of another. *For example:*
+
+  ```python
+  def test_dict_contains():
+      """
+      Check whether one dictionary is a subset of another.
+      """
+      expected = {"name": "Alice"}
+      actual = {"name": "Alice", "age": 23}
+      assert expected.items() <= actual.items()
+  ```
+- uses `pytest.raises` to verify the expected error is raised. *For example:*
+
+  ```python
+  def test_divide_by_zero():
+      """
+      Verifies that the expected error is raised.
+      """
+      # verify the error type
+      with pytest.raises(ZeroDivisionError) as exc_info:
+          assert 10 / 0
+
+      # verify the error message
+      assert str(exc_info.value) == "division by zero"
+  ```
 
 ### Testing exceptions
 `pytest.raises` is used to test exceptions. *For example:*
@@ -542,14 +572,133 @@ def test_divide_by_zero():
 ```
 
 ### Fixtures
-- Fixtures are one of `pytest`'s most powerful features. Instead of creating the same objects repeatedly, we create fixtures then reuse them. *For example:*
+- Fixtures are one of the most powerful features of `pytest`. They are used to **provide reusable setup and teardown logic** for tests. *For example:*
 
   ```python
   @pytest.fixture
   def user():
-      return User("Alice")
+      return {
+          "id": 1,
+          "name": "Alice"
+      }
+
+
+  def test_user_name(user):
+      """
+      Verifies user's name
+      """
+      assert user["name"] == "Alice"
   ```
-- TODO: more about fixture: scope, autouse
+- A **fixture can** create objects, open database connections, prepare test data, start services, configure clients, etc.
+- The fixture scope **controls how often** a fixture **is created** and **destroyed.** Pytest has 5 built-in scopes:
+
+  | Scope                   | Created                       | Destroyed                 |
+  |-------------------------|-------------------------------|---------------------------|
+  | `function` (*default*)  | once per test **function**    | after each test           |
+  | `class`                 | once per test **class**       | after class finishes      |
+  | `module`                | once per Python **file**      | after module finishes     |
+  | `package`               | once per **package**          | after package finishes    |
+  | `session`               | once per **entire** test run  | after all tests finishes  |
+
+  *For example:*
+
+  ```python
+  @pytest.fixture
+  def user():
+      """
+      Fake user
+      """
+      print("\nfake user")
+      return {"id": 1, "name": "Alice"}
+
+
+  def test_first_use_user_fixture(user):
+      """
+      First use the user fixture
+      """
+
+
+  def test_second_use_user_fixture(user):
+      """
+      Second use the user fixture
+      """
+
+
+  @pytest.fixture(scope="module")
+  def fixture_db():
+      """
+      Fake database connection
+      """
+      print("\nfake database connection")
+
+
+  def test_first_use_db_fixture(db):
+      """
+      First use the db fixture
+      """
+
+
+  def test_second_use_db_fixture(db):
+      """
+      Second use the db fixture
+      """
+  ```
+
+  In the example above,
+  - The fixture `user` defaults to `function` scope, causing `fake user` to **print twice.**
+  - The `db` fixture uses `module` scope, so `fake database connection` prints **only once despite** being referenced in two tests.
+- Fixtures often require cleanup, such as closing database connection or files. **Place** any **teardown code after** the `yield`, it **will run once** the test completes. *For example:*
+
+  ```python
+  @pytest.fixture(scope="module", name="db")
+  def fixture_db():
+      """
+      Fake database connection
+      """
+      print("\nfake open database connection")
+      yield
+      print("\nfake close database connection")
+  ```
+- By default, `pytest` **provides fixtures only** when requested. Setting `autouse=True` **makes** the fixture **run automatically.** *For example:*
+
+  ```python
+  @pytest.fixture(autouse=True)
+  def setup_env():
+      """
+      Fake setup environment
+      """
+      print("\nfake setup environment")
+  ```
+- **Autouse** fixtures are **suitable for global** setup or teardown tasks. It **should not be used for** database fixtures, as many tests do not need database setup.
+- `conftest.py` is a **special** `pytest` **configuration file** whose **fixtures are shared** across all tests in the project. Pytest **searches fixtures** in this order:
+
+  ```text
+  test file
+      |
+      v
+  same directory conftest.py
+      |
+      v
+  parent directory conftest.py
+      |
+      v
+  pytest plugins
+  ```
+
+  *For example:*
+
+  ```text
+  tests/
+  │
+  ├── conftest.py       # available everywhere
+  │
+  ├── routers/
+  │   ├── conftest.py   # only routers tests
+  │   └── test_posts.py
+  │
+  └── schemas/
+      └── test_post.py
+  ```
 
 ### Parametrized tests
 TODO
