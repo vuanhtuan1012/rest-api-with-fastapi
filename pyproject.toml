@@ -26,3 +26,7 @@ select = ["E", "F", "I"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
+
+
+[tool.coverage.run]
+source = ["social_media_api"]

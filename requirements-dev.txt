@@ -9,3 +9,4 @@ ruff
 httpx
 requests
 pytest-asyncio
+pytest-cov

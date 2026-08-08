@@ -917,7 +917,77 @@ def test_divide_by_zero():
     ```
 
 ### Measuring coverage
-TODO
+- Test coverage measures **how much of code is executed** while **tests are running.** *For example,* given the `get_post()` function and the `test_get_post()` test below:
+
+  ```python
+  # posts.py
+  def get_post(post_id: int):
+      if post_id <= 0:
+          raise ValueError("Invalid ID")
+      return repository.get(post_id)
+
+
+  # test_post.py
+  def test_get_post():
+      post = get_post(1)
+      assert post["id"] == 1
+  ```
+  When the test executes, only a part of the code is tested. Coverage identifies that.
+  ```text
+  def get_post()
+      │
+      ├── if post_id <= 0  ← executed
+      │
+      ├── raise ValueError ← NOT executed
+      │
+      └── repository.get() ← executed
+  ```
+- It **needs to install** `pytest-cov` **plugin** to test coverage.
+  - Measure **all** project code.
+
+    ```bash
+    pytest --cov
+    ```
+  - Measure **only application** code.
+
+    ```bash
+    pytest --cov=social_media_api
+    ```
+  - Generate an **HTML report.** This visual report shows which lines were executed and which weren't.
+
+    ```bash
+    pytest --cov=social_media_api --cov-report=html
+    ```
+  - In the resultat, the **important columns** are:
+    - `Stmts`: indicates the number of **executable statements.**
+    - `Miss`: indicates the number of **statements not executed.**
+    - `Cover`: indicates the **percentage executed.**
+
+    *For example:*
+
+    ```bash
+    ------ coverage: platform win32, python 3.13.14-final-0 ------
+
+    Name                                   Stmts   Miss  Cover
+    ----------------------------------------------------------
+    social_media_api\__init__.py               0      0   100%
+    social_media_api\database.py               3      0   100%
+    social_media_api\main.py                   6      0   100%
+    social_media_api\routers\__init__.py       0      0   100%
+    social_media_api\routers\comments.py      15      8    47%
+    social_media_api\routers\posts.py         28     13    54%
+    social_media_api\schemas\__init__.py       0      0   100%
+    social_media_api\schemas\comment.py        6      0   100%
+    social_media_api\schemas\post.py           9      0   100%
+    ----------------------------------------------------------
+    TOTAL                                     67     21    69%
+    ```
+- The following `pyproject.toml` configuration **restricts** coverage measurement **to application code** by default.
+
+  ```toml
+  [tool.coverage.run]
+  source = ["social_media_api"]
+  ```
 
 ### Useful command-line options
 - Run all tests: `pytest`.
