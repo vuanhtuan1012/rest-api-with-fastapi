@@ -293,7 +293,7 @@ REST is a set of architectural constraints.
   - **Setting models**: Easily load config from `.env` or OS environment variables.
 
 ### Request Model
-- A **request model** in FastAPI is just a **Pydantic model** that is used to describe and validate the shape of incoming data (usually JSON in the request body). *For example,*
+- A **request model** in FastAPI is just a **Pydantic model** that is used to describe and validate the shape of incoming data (usually JSON in the request body). *For example:*
 
   ```python
   from pydantic import BaseModel
@@ -378,7 +378,7 @@ REST is a set of architectural constraints.
   - **Versioning** & **prefixes**: Easily group endpoints under `/api/v1`, `/auth`, etc.
   - **Shared settings**: Apply tags, dependencies, or responses to a whole group.
 
-- *For example,*
+- *For example:*
   - `routers/posts.py`
 
     ```python
@@ -783,7 +783,7 @@ def test_divide_by_zero():
       "body": "fake body",
   }
   ```
-- More commonly `patch()` is used to temporarily replace a real object. For example,
+- More commonly `patch()` is used to temporarily replace a real object. *For example:*
 
   ```python
   # posts.py
