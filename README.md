@@ -731,7 +731,190 @@ def test_divide_by_zero():
   ```
 
 ### Mocking
-TODO
+- Mocking **replaces a real dependency** with a fake object so code can **be tested in isolation.** *For example,* instead of making real database access during a test, use a `Mock()` to make it faster, isolated, and reproducible.
+
+  ```python
+  # posts.py
+  class PostService:  # pylint:disable=R0903
+      """
+      PostService class
+      """
+
+      def __init__(self, repository: dict[int, dict]) -> None:
+          self.repository = repository
+
+      def get_post_by_id(self, post_id: int) -> dict:
+          """
+          Retrieves post from database
+          """
+          return self.repository.get(post_id, {})
+
+
+  # test_posts.py
+  from unittest.mock import Mock
+
+  from tests.basics.posts import PostService
+
+
+  def test_get_post_from_database():
+      """
+      Checks that the database returns the expected post
+      """
+      repository = Mock()
+      repository.get.return_value = {
+          "userId": 1,
+          "id": 1,
+          "title": "fake title",
+          "body": "fake body",
+      }
+      post_service = PostService(repository)
+      result = post_service.get_post_by_id(1)
+      expected = {"id": 1}
+      assert expected.items() <= result.items()
+  ```
+- `return_value` **defines** exactly **what the mock should return** when called. *For example:*
+
+  ```python
+  repository = Mock()
+  repository.get.return_value = {
+      "userId": 1,
+      "id": 1,
+      "title": "fake title",
+      "body": "fake body",
+  }
+  ```
+- More commonly `patch()` is used to temporarily replace a real object. For example,
+
+  ```python
+  # posts.py
+  import requests
+
+  BASE_URL = "https://jsonplaceholder.typicode.com/posts"
+
+
+  def get_post(post_id: int):
+      """
+      Retrieves a post from external API
+      """
+      url = f"{BASE_URL}/{post_id}"
+      response = requests.get(url, timeout=5)
+      return response.json()
+
+
+  # test_posts.py
+  from unittest.mock import patch
+
+  from tests.basics.posts import get_post
+
+
+  def test_get_post_from_api():
+      """
+      Checks that the API returns the expected post
+      """
+      with patch("tests.basics.posts.requests.get") as mock_get:
+          mock_get.return_value.json.return_value = {
+              "userId": 1,
+              "id": 1,
+              "title": "fake title",
+              "body": "fake body",
+          }
+          result = get_post(1)
+      expected = {"id": 1}
+      assert expected.items() <= result.items()
+  ```
+  **Notes:**
+  - The **dotted path** in `path()` tells `pytest` the function `requests.get` in `tests.basics.posts` is **temporarily replaced** by a mock **inside** the `with` block.
+  - **Path** the name **where the code** under test **looks it up** (`tests.basics.posts.requests.get` *in the example*), **not** where the object was originally defined (`requests.get` *in the example*).
+- `MagicMock` is essentially a **more powerful** `Mock` that **supports** Python's **magic methods,** such as `__len__`, `__iter__`, `__getitem__`, `__enter__`, `__exit__`, etc.
+- `side_effect` **allows** the mock to **perform custom logic** such as *raise exception*, *return different values per call*, or *execute a callable* instead of returning a fixed value. *For example:*
+
+  ```python
+  def test_get_post_db_error():
+      """
+      Checks that the database triggers the expected exception
+      """
+      repository = Mock()
+      repository.get.side_effect = ConnectionError("Database unavailable")
+      post_service = PostService(repository)
+      with pytest.raises(ConnectionError):
+          post_service.get_post_by_id(1)
+  ```
+- The mocking approach for **async functions** mirrors that of the sync functions, **use** `AsyncMock` to **mock async dependencies.** *For example:*
+
+  ```python
+  # async_posts.py
+  import asyncio
+
+  from httpx import AsyncClient
+
+  BASE_URL = "https://jsonplaceholder.typicode.com/posts"
+
+
+  async def async_get_post(client: AsyncClient, post_id: int):
+      """
+      Retrieves a post from external API
+      """
+      url = f"{BASE_URL}/{post_id}"
+
+      response = await client.get(url)
+      response.raise_for_status()
+      return response.json()
+
+
+  # test_posts.py
+  from unittest.mock import AsyncMock, Mock
+
+  import pytest
+  from httpx import HTTPStatusError
+
+  from tests.basics.async_posts import async_get_post
+
+
+  @pytest.mark.asyncio
+  async def test_async_get_post():
+      """
+      Checks that the async function returns the expected post
+      """
+      response = Mock()
+      response.json.return_value = {
+          "userId": 1,
+          "id": 1,
+          "title": "fake title",
+          "body": "fake body",
+      }
+
+      client = AsyncMock()
+      client.get.return_value = response
+
+      result = await async_get_post(client, 1)
+      expected = {"id": 1}
+      assert expected.items() <= result.items()
+
+
+  @pytest.mark.asyncio
+  async def test_async_get_post_http_error():
+      """
+      Checks that the async function triggers the expected exception
+      """
+      response = Mock()
+      response.raise_for_status.side_effect = HTTPStatusError(
+          "404 Not Found", request=Mock(), response=Mock()
+      )
+
+      client = AsyncMock()
+      client.get.return_value = response
+
+      with pytest.raises(HTTPStatusError):
+          await async_get_post(client, 999)
+  ```
+  **Notes:**
+  - `pytest` **does not natively support** `async def` tests. It **needs to install** a suitable plugin, such as `pytest-asyncio` to run `async def` tests.
+  - `@pytest.mark.asyncio` **instructs** `pytest` to execute the test **using** an `asyncio` **event loop.** Alternatively, with **proper** `pyproject.toml` **configuration,** `pytest-asyncio` can **detect** `async def` tests **automatically.**
+
+    ```toml
+    [tool.pytest.ini_options]
+    asyncio_mode = "auto"
+    ```
 
 ### Measuring coverage
 TODO
