@@ -515,20 +515,13 @@ REST is a set of architectural constraints.
 - `pytest` uses normal Python `assert`, no need methods like `self.assertEqual` in `unittest`. *For example:*
 
   ```python
-  # calculator.py
-  def add(a, b):
+  def test_add_two():
       """
-      Performs an addtion operator
+      Performs a basic test case
       """
-      return a + b
-
-
-  # test_calculator.py
-  def test_add():
-      """
-      Tests add function
-      """
-      assert add(2, 3) == 5
+      x = 1
+      y = 2
+      assert x + y == 3
   ```
 - uses the `<=` operator to check whether an dictionary is a subset of another. *For example:*
 
@@ -541,34 +534,21 @@ REST is a set of architectural constraints.
       actual = {"name": "Alice", "age": 23}
       assert expected.items() <= actual.items()
   ```
-- uses `pytest.raises` to verify the expected error is raised. *For example:*
-
-  ```python
-  def test_divide_by_zero():
-      """
-      Verifies that the expected error is raised.
-      """
-      # verify the error type
-      with pytest.raises(ZeroDivisionError) as exc_info:
-          assert 10 / 0
-
-      # verify the error message
-      assert str(exc_info.value) == "division by zero"
-  ```
 
 ### Testing exceptions
-`pytest.raises` is used to test exceptions. *For example:*
+`pytest.raises` is used to **verify** the **expected error** is raised. *For example:*
 
 ```python
-# calculator.py
-def divide(a, b):
-    return a / b
-
-
-# test_calculator.py
 def test_divide_by_zero():
-    with pytest.raises(ZeroDivisionError):
-      divide(10, 0)
+    """
+    Verifies that the expected error is raised.
+    """
+    # verify the error type
+    with pytest.raises(ZeroDivisionError) as exc_info:
+        assert 10 / 0
+
+    # verify the error message
+    assert str(exc_info.value) == "division by zero"
 ```
 
 ### Fixtures
@@ -701,7 +681,54 @@ def test_divide_by_zero():
   ```
 
 ### Parametrized tests
-TODO
+- Parametrized tests allow to **run the same test logic** with **multiple sets of input data** without duplicating the test function. *For example:*
+
+  ```python
+  @pytest.mark.parametrize("number", [2, 4, 6])
+  def test_is_even(number):
+      """
+      Checks whether number is even
+      """
+      assert number % 2 == 0
+  ```
+- The decorator `pytest.mark.parametrize` is used to **create** parameterized tests.
+- We can **parameterize several arguments.** *For example:*
+
+  ```python
+  @pytest.mark.parametrize(
+      "a, b, expected",
+      [
+          (1, 2, 3),
+          (-5, -3, -8),
+          (10, -20, -10),
+      ],
+  )
+  def test_add(a, b, expected):
+      """
+      Performs addition tests
+      """
+      result = a + b
+      assert result == expected
+  ```
+- We can **use** `ids` parameter to give test cases **meaningful names.** *For example:*
+
+  ```python
+  @pytest.mark.parametrize(
+      "a, b, expected",
+      [
+          (1, 2, 3),
+          (-5, -3, -8),
+          (10, -20, -10),
+      ],
+      ids=["positive numbers", "negative numbers", "mix numbers"],
+  )
+  def test_add(a, b, expected):
+      """
+      Performs addition tests
+      """
+      result = a + b
+      assert result == expected
+  ```
 
 ### Mocking
 TODO
