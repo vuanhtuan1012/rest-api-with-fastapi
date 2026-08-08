@@ -1000,9 +1000,9 @@ def test_divide_by_zero():
 ### Best practices
 - Keep tests **independent:** one test should not rely on another.
 - Follow the **Arrange-Act-Assert (AAA)** pattern:
-  - Arrange: set up data.
-  - Act: call the code under test.
-  - Assert: verify the result.
+  - **Arrange:** set up data.
+  - **Act:** call the code under test.
+  - **Assert:** verify the result.
 - Use **fixtures for shared setup.**
 - Mock **external dependencies** (HTTP services, email providers, etc.).
 - Use **a separate test database** rather than a development or production datbase.
