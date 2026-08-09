@@ -2,7 +2,7 @@
 # @Author: VU Anh Tuan
 # @Date:   2026-08-07 18:32:49
 # @Last Modified by:   VU Anh Tuan
-# @Last Modified time: 2026-08-07 20:20:42
+# @Last Modified time: 2026-08-09 07:25:20
 """
 Test fixtures
 """
@@ -11,7 +11,7 @@ import pytest
 
 
 @pytest.fixture(name="user")
-def fixture_user():
+def user_fixture():
     """
     Fake user
     """
@@ -33,7 +33,7 @@ def test_second_use_user_fixture(user):
 
 
 @pytest.fixture(scope="module", name="db")
-def fixture_db():
+def db_fixture():
     """
     Fake database connection
     """
