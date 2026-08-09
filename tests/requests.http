@@ -1,0 +1,49 @@
+### [REST Client] Social Media APIs collection
+@base_url = http://localhost:8000
+@post_id = 1
+@non_existed_post_id = 999
+
+# Posts endpoints
+### Create post success
+POST {{base_url}}/posts
+Content-Type: application/json
+
+{
+  "body": "This is a sample post."
+}
+
+### Create post failure
+POST {{base_url}}/posts
+Content-Type: application/json
+
+### Get list of posts
+GET {{base_url}}/posts
+
+### Get comments on post success
+GET {{base_url}}/posts/{{post_id}}/comments
+
+### Get comments on post failure
+GET {{base_url}}/posts/{{non_existed_post_id}}/comments
+
+### Get post with comments
+GET {{base_url}}/posts/{{post_id}}
+
+
+# Comments endpoints
+### Create comment success
+POST {{base_url}}/comments
+Content-Type: application/json
+
+{
+  "body": "This is a sample comment.",
+  "post_id": {{post_id}}
+}
+
+### Create comment failure
+POST {{base_url}}/comments
+Content-Type: application/json
+
+{
+  "body": "This is a sample comment.",
+  "post_id": {{non_existed_post_id}}
+}
