@@ -2,7 +2,7 @@
 # @Author: VU Anh Tuan
 # @Date:   2025-08-10 10:53:44
 # @Last Modified by:   VU Anh Tuan
-# @Last Modified time: 2026-08-07 09:38:12
+# @Last Modified time: 2026-08-09 09:15:43
 """
 Posts endpoints
 """
@@ -53,6 +53,9 @@ async def get_comments_on_post(post_id: int):
     """
     Returns a list of posts
     """
+    post = get_post(post_id)
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
     return [comment for comment in COMMENT_TABLE.values() if comment["post_id"] == post_id]
 
 
