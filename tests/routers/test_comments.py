@@ -2,7 +2,7 @@
 # @Author: VU Anh Tuan
 # @Date:   2026-08-09 07:51:42
 # @Last Modified by:   VU Anh Tuan
-# @Last Modified time: 2026-08-09 08:00:07
+# @Last Modified time: 2026-08-09 09:24:51
 """
 Performs tests on comments endpoint
 """
@@ -29,9 +29,20 @@ async def test_create_comment_success(
 
 
 @pytest.mark.usefixtures("db")
-async def test_create_comment_failure(async_client: AsyncClient, endpoints: dict):
+async def test_create_comment_missing_fields(async_client: AsyncClient, endpoints: dict):
     """
     Ensures create-comment endpoint rejects invalid input and does not create new comment
     """
     response = await async_client.post(endpoints["comments"], json={"body": "Sample Comment"})
     assert response.status_code == 422
+
+
+@pytest.mark.usefixtures("db")
+async def test_create_comment_non_existed_post(async_client: AsyncClient, endpoints: dict):
+    """
+    Ensures create-comment endpoint rejects invalid input and does not create new comment
+    """
+    response = await async_client.post(
+        endpoints["comments"], json={"body": "Sample Comment", "post_id": 1}
+    )
+    assert response.status_code == 404
