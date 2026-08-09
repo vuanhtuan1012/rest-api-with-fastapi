@@ -428,17 +428,17 @@ REST is a set of architectural constraints.
   │   ├── __init__.py
   │   ├── main.py
   │   │
-  │   ├── routers/   # HTTP layer
+  │   ├── routers/           # HTTP layer handles requests and responses
   │   │   ├── __init__.py
   │   │   └── comments.py
   │   │   └── posts.py
   │   │
-  │   ├── models/   # ORM models (database schema)
+  │   ├── models/            # ORM models (database schema)
   │   │   ├── __init__.py
   │   │   └── comment.py
   │   │   └── post.py
   │   │
-  │   ├── schemas/   # Pydantic models (data schema)
+  │   ├── schemas/           # Pydantic models (data schema)
   │   │   ├── __init__.py
   │   │   └── comment.py
   │   │   └── post.py
@@ -449,7 +449,7 @@ REST is a set of architectural constraints.
   ├── tests/
   ├── Dockerfile
   ├── requirements.txt
-  └── pyproject.toml   # optional but recommended
+  └── pyproject.toml         # optional but recommended
   ```
 - As the project grows, we can introduce additional layers:
   - `services`: implement the **business logic** (*permissions, validation beyond schema checks, workflows, notifications, rate limits, etc.*) and coordinate application workflows.
