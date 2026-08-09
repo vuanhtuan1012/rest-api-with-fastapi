@@ -30,7 +30,7 @@ This repo contains notes and projects of the course [Mastering REST APIs with Fa
   - [Project structure](#project-structure)
   - [Pyproject file](#pyproject-file)
 - [Module 3: Introduction to pytest](#module-3-introduction-to-pytest)
-  - [Basic of pytest](#basic-of-pytest)
+  - [Basics of pytest](#basics-of-pytest)
   - [Assertions](#assertions)
   - [Testing exceptions](#testing-exceptions)
   - [Fixtures](#fixtures)
@@ -487,7 +487,7 @@ REST is a set of architectural constraints.
 
 ## Module 3: Introduction to pytest
 
-### Basic of pytest
+### Basics of pytest
 - `pytest` is a testing framework that helps:
   - write automated tests.
   - verify code behaves correctly.
