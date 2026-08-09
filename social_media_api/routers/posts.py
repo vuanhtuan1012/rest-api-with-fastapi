@@ -2,7 +2,7 @@
 # @Author: VU Anh Tuan
 # @Date:   2025-08-10 10:53:44
 # @Last Modified by:   VU Anh Tuan
-# @Last Modified time: 2026-08-09 09:15:43
+# @Last Modified time: 2026-08-09 16:45:46
 """
 Posts endpoints
 """
@@ -51,7 +51,7 @@ async def get_all_posts():
 @router.get("/{post_id}/comments", response_model=list[Comment])
 async def get_comments_on_post(post_id: int):
     """
-    Returns a list of posts
+    Returns the list of comments associated with post_id
     """
     post = get_post(post_id)
     if not post:
