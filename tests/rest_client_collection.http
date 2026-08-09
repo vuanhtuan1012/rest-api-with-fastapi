@@ -1,4 +1,4 @@
-### [REST Client] Social Media APIs collection
+### [REST Client collection] Social Media APIs
 @base_url = http://localhost:8000
 @post_id = 1
 @non_existed_post_id = 999
