@@ -652,7 +652,7 @@ def test_divide_by_zero():
 - **Be careful** with `autouse` fixtures since they **run for every test within their scope,** which may be unnecessary.
   - **Autouse** fixtures are **suitable for global** setup or teardown tasks.
   - It **should not be used for** database fixtures, as many tests do not need database setup.
-- **Apply** the `@pytest.mark.usefixtures` decorator allows **to specify fixtures for a test without referencing them** in the function signature. *For example:*
+- **Apply** the `@pytest.mark.usefixtures` decorator to **specify fixtures** for a test **without referencing them** in the function signature. *For example:*
 
   ```python
   @pytest.mark.usefixtures("db")
@@ -661,7 +661,7 @@ def test_divide_by_zero():
       Ensures the create-post endpoint produces a new post successfully
       """
   ```
-  `@pytest.mark.usefixtures` accepts **multiple fixture names.** *For example,* `@pytest.mark.usefixtures("db", "other fixture")`.
+  `@pytest.mark.usefixtures` **accepts multiple** fixture names. *For example,* `@pytest.mark.usefixtures("db", "other fixture")`.
 - `conftest.py` is a **special** `pytest` **configuration file** whose **fixtures are shared** across all tests in the project. Pytest **searches fixtures** in this order:
 
   ```text
