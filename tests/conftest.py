@@ -2,7 +2,7 @@
 # @Author: VU Anh Tuan
 # @Date:   2026-08-06 18:29:25
 # @Last Modified by:   VU Anh Tuan
-# @Last Modified time: 2026-08-09 07:28:09
+# @Last Modified time: 2026-08-09 15:58:10
 """
 Provides global fixtures
 """
@@ -18,21 +18,21 @@ from social_media_api.main import app
 
 
 @pytest.fixture(name="client")
-def http_client() -> Generator:
+def client_fixture() -> Generator:
     """
     Provides HTTP client
     """
     yield TestClient(app)
 
 
-@pytest.fixture
-async def async_client(client) -> AsyncGenerator:
+@pytest.fixture(name="async_client")
+async def async_client_fixture(client) -> AsyncGenerator:
     """
     Provides async client
     """
     transport = ASGITransport(app=app)
-    async with AsyncClient(transport=transport, base_url=client.base_url) as async_cli:
-        yield async_cli
+    async with AsyncClient(transport=transport, base_url=client.base_url) as async_client:
+        yield async_client
 
 
 @pytest.fixture
